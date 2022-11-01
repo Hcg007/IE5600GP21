@@ -1,13 +1,13 @@
 class BaseInformationSystem():
     def __init__(self):
         # 原始信息读取
-        self.SaveRoot="../Forms/Template/"
+        self.SaveRoot = "../Forms/Template/"
         self.InventoryInfo = self.ReadCsv("../Forms/Template/InventoryForm.csv")
         self.SupplierInfo = self.ReadCsv("../Forms/Template/SupplierForm.csv")
         self.InboundInfo = self.ReadCsv("../Forms/Template/InboundForm.csv")
         self.OutboundInfo = self.ReadCsv("../Forms/Template/OutboundForm.csv")
         self.PurchaseInfo = self.ReadCsv("../Forms/Template/PurchaseForm.csv")
-        self.OrderAggregationInfo = None#当日订单汇总
+        self.OrderAggregationInfo = None  # 当日订单汇总
         # 只提取索引
         self.InventoryInfoKeys = self.ReadCsvKeys("../Forms/Template/InventoryForm.csv")
         self.SupplierInfoKeys = self.ReadCsvKeys("../Forms/Template/SupplierForm.csv")
@@ -55,35 +55,33 @@ class BaseInformationSystem():
         # 遍历根目录下文件夹
         import os
         OrderSaveRoot = self.SaveRoot + "Orders/"
-        Orderlist=[]
-        Aggregationlist=[]
+        Orderlist = []
+        Aggregationlist = []
         for root, dirs, files in os.walk(OrderSaveRoot, topdown=True):
             for file in files:
-                path=os.path.join(root, file)
-                #将path的\替换为/
-                path=path.replace('\\','/')
+                path = os.path.join(root, file)
+                # 将path的\替换为/
+                path = path.replace('\\', '/')
                 Orderlist.append(path)
         for i in range(len(Orderlist)):
-            csv=self.ReadCsv(Orderlist[i])
-            Aggregationlist.append(OrderSaveRoot+Orderlist[i][25:35]+".csv")
-            self.SaveCsv(csv,OrderSaveRoot+Orderlist[i][25:35]+".csv")#同名会直接添加进去而不是覆盖
+            csv = self.ReadCsv(Orderlist[i])
+            Aggregationlist.append(OrderSaveRoot + Orderlist[i][25:35] + ".csv")
+            self.SaveCsv(csv, OrderSaveRoot + Orderlist[i][25:35] + ".csv")  # 同名会直接添加进去而不是覆盖
 
-        #删除重复项
-        Aggregationlist=list(set(Aggregationlist))
-        #将产生的汇总表重新编号
+        # 删除重复项
+        Aggregationlist = list(set(Aggregationlist))
+        # 将产生的汇总表重新编号
         for i in Aggregationlist:
             self.ReNumberAggregation(i)
 
-
-    def ReNumberAggregation(self,csvpath):#汇总表重新编号
+    def ReNumberAggregation(self, csvpath):  # 汇总表重新编号
         try:
-            csv=self.ReadCsv(csvpath)
+            csv = self.ReadCsv(csvpath)
             for i in range(len(csv)):
-                csv[i]["ID"]=str(i+1)
-            self.SaveCsv(csv,csvpath)
+                csv[i]["ID"] = str(i + 1)
+            self.SaveCsv(csv, csvpath)
         except:
             print("{}重新编号失败".format(csvpath))
-
 
     def search(self, query):
         pass
@@ -115,7 +113,7 @@ class Order():
         self.Order = {"ID": "", "OrderNumber": "", "SupermarketName": "", "SupermarketNumber": "", "ItemNumber": "",
                       "ItemName": '', "Specification": "",
                       "OrderAmount": "", "OrderDate": "", "Contact": "", "ContactNumber": ""}
-        self.OrderTime = None
+        self.Ordertime = None
         self.TodayOrder = None
 
     def ReadCsv(self, csvpath):
@@ -137,7 +135,7 @@ class Order():
 
         return infoList
 
-    def GenerateOrder(self):
+    def GenerateOrder(self):  # 生成单个
         import random
         import datetime
         total_id = random.randint(1, 100)
@@ -166,6 +164,20 @@ class Order():
             self.OrderInfo.append(self.Order.copy())
 
         return self.OrderInfo
+
+    def GenerateOrderbyDays(self,days):  # 生成多个
+        import datetime
+        currentTime=datetime.datetime.now()
+        for i in range(days):
+            self.GenerateOrder()
+            for j in range(len(self.OrderInfo)):
+                self.Ordertime =currentTime + datetime.timedelta(days=i)
+                self.OrderInfo[j]["OrderDate"]=self.Ordertime.strftime('%Y-%m-%d')
+                self.OrderInfo[j]["OrderNumber"]=self.Ordertime.strftime('%Y%m%d%H%M%S')
+                self.OrderSave()
+
+
+
 
     def ClearAllinRoot(self):
         import os
@@ -210,15 +222,14 @@ class Order():
                 f.write('\n')
 
 
-
 if __name__ == '__main__':
     info = BaseInformationSystem()
-    """generator = OrderGenerator()
+    generator = Order()
     generator.ClearAllinRoot()
     for i in range(3):
-        generator.GenerateOrder()
+        #generator.GenerateOrder()
+        generator.GenerateOrderbyDays(3)
         generator.OrderSave()
         generator.Delay(1)
-    
-    print(info.TodayOrder)"""
+
     info.AggregatedOrder()
