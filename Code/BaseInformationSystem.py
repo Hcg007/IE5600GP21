@@ -1,11 +1,13 @@
 class BaseInformationSystem():
     def __init__(self):
         # 原始信息读取
+        self.SaveRoot="../Forms/Template/"
         self.InventoryInfo = self.ReadCsv("../Forms/Template/InventoryForm.csv")
         self.SupplierInfo = self.ReadCsv("../Forms/Template/SupplierForm.csv")
         self.InboundInfo = self.ReadCsv("../Forms/Template/InboundForm.csv")
         self.OutboundInfo = self.ReadCsv("../Forms/Template/OutboundForm.csv")
         self.PurchaseInfo = self.ReadCsv("../Forms/Template/PurchaseForm.csv")
+        self.OrderAggregationInfo = None#当日订单汇总
         # 只提取索引
         self.InventoryInfoKeys = self.ReadCsvKeys("../Forms/Template/InventoryForm.csv")
         self.SupplierInfoKeys = self.ReadCsvKeys("../Forms/Template/SupplierForm.csv")
@@ -49,13 +51,47 @@ class BaseInformationSystem():
                 keys[i] = keys[i].replace('\n', '')
         return keys
 
+    def AggregatedOrder(self):
+        # 遍历根目录下文件夹
+        import os
+        OrderSaveRoot = self.SaveRoot + "Orders/"
+        Orderlist=[]
+        Aggregationlist=[]
+        for root, dirs, files in os.walk(OrderSaveRoot, topdown=True):
+            for file in files:
+                path=os.path.join(root, file)
+                #将path的\替换为/
+                path=path.replace('\\','/')
+                Orderlist.append(path)
+        for i in range(len(Orderlist)):
+            csv=self.ReadCsv(Orderlist[i])
+            Aggregationlist.append(OrderSaveRoot+Orderlist[i][25:35]+".csv")
+            self.SaveCsv(csv,OrderSaveRoot+Orderlist[i][25:35]+".csv")#同名会直接添加进去而不是覆盖
+
+        #删除重复项
+        Aggregationlist=list(set(Aggregationlist))
+        #将产生的汇总表重新编号
+        for i in Aggregationlist:
+            self.ReNumberAggregation(i)
+
+
+    def ReNumberAggregation(self,csvpath):#汇总表重新编号
+        try:
+            csv=self.ReadCsv(csvpath)
+            for i in range(len(csv)):
+                csv[i]["ID"]=str(i+1)
+            self.SaveCsv(csv,csvpath)
+        except:
+            print("{}重新编号失败".format(csvpath))
+
+
     def search(self, query):
         pass
 
     def get(self, id):
         pass
 
-    def add(self, data):
+    def add(self):
         pass
 
     def update(self, id, data):
@@ -76,9 +112,11 @@ class Order():
         self.OriginalOrderInfo = self.ReadCsv("../Forms/Template/InventoryForm.csv")
         self.SupermarketInfo = self.ReadCsv("../Forms/Template/SupermarketForm.csv")
         self.OrderInfo = []
-        self.Order = {"ID": "", "SupermarketName": "", "SupermarketNumber": "", "ItemNumber": "", "ItemName": '', "Specification": "",
-                      "OrderNumber": "", "OrderDate": "", "Contact": "", "ContactNumber": ""}
+        self.Order = {"ID": "", "OrderNumber": "", "SupermarketName": "", "SupermarketNumber": "", "ItemNumber": "",
+                      "ItemName": '', "Specification": "",
+                      "OrderAmount": "", "OrderDate": "", "Contact": "", "ContactNumber": ""}
         self.OrderTime = None
+        self.TodayOrder = None
 
     def ReadCsv(self, csvpath):
         with open(csvpath, 'r') as f:
@@ -106,26 +144,35 @@ class Order():
         suppermarket_id = random.randint(1, len(self.SupermarketInfo))
         self.Ordertime = datetime.datetime.now()
         self.Order["OrderDate"] = self.Ordertime.strftime('%Y-%m-%d')
+        self.Order["OrderNumber"] = self.Ordertime.strftime('%Y%m%d%H%M%S')
         self.Order["SupermarketName"] = self.SupermarketInfo[suppermarket_id - 1]["SupermarketName"]
         self.Order["SupermarketNumber"] = self.SupermarketInfo[suppermarket_id - 1]["SupermarketNumber"]
         self.Order["ContactNumber"] = self.SupermarketInfo[suppermarket_id - 1]["ContactNumber"]
         self.Order["Contact"] = self.SupermarketInfo[suppermarket_id - 1]["Contact"]
+        goodID_list = []
         for i in range(1, total_id + 1):
             self.Order["ID"] = str(i)
             goodID = random.randint(1, len(self.OriginalOrderInfo))
+            # 检查是否重复
+            while goodID in goodID_list:
+                goodID = random.randint(1, len(self.OriginalOrderInfo))
+            goodID_list.append(goodID)
             self.Order["ItemNumber"] = self.OriginalOrderInfo[goodID - 1]["ItemNumber"]
             self.Order["ItemName"] = self.OriginalOrderInfo[goodID - 1]["ItemName"]
             self.Order["Specification"] = self.OriginalOrderInfo[goodID - 1]["Specification"]
-            #单个订单的货品数量不大于当前库存
+            # 单个订单的货品数量不大于当前库存
             maxNum = int(self.OriginalOrderInfo[goodID - 1]["CurrentInventory"])
-            self.Order["ItemNumber"] = str(random.randint(1, maxNum))
-
+            self.Order["OrderAmount"] = str(random.randint(1, maxNum))
             self.OrderInfo.append(self.Order.copy())
+
+        return self.OrderInfo
 
     def ClearAllinRoot(self):
         import os
-        for i in os.listdir(self.OrderSaveRoot):
-            os.remove(self.OrderSaveRoot + i)
+        import shutil
+        # 删除文件夹下所有文件和文件夹
+        if os.path.exists(self.OrderSaveRoot):
+            shutil.rmtree(self.OrderSaveRoot)
 
     def Delay(self, seconds):
         import time
@@ -139,17 +186,18 @@ class Order():
                 keys[i] = keys[i].replace('\n', '')
         return keys
 
-    def OrderGenerate(self, OrderInfo):
-        OrderInfo = dict(zip(self.Order, OrderInfo))
-        return OrderInfo
-
     def OrderSave(self):
-        import datetime
-        # save
-        ordertime = "{}{}{}{}{}{}".format(self.Ordertime.year, self.Ordertime.month, self.Ordertime.day,
-                                          self.Ordertime.hour, self.Ordertime.minute, self.Ordertime.second)
-        suffix = "Order"+str(ordertime) + ".csv"
-        path = self.OrderSaveRoot + suffix
+        ordertime = self.Ordertime.strftime('%Y%m%d%H%M%S')
+        suffix = "Order" + str(ordertime) + ".csv"
+        strdate = self.Ordertime.strftime('%Y-%m-%d')
+        # 创建文件夹
+        import os
+        if not os.path.exists(self.OrderSaveRoot):
+            os.mkdir(self.OrderSaveRoot)
+        if not os.path.exists(self.OrderSaveRoot + strdate):
+            os.mkdir(self.OrderSaveRoot + strdate)
+        # 保存文件
+        path = self.OrderSaveRoot + strdate + '/' + suffix
         self.SaveCsv(self.OrderInfo, path)
 
     def SaveCsv(self, Data, csvpath):
@@ -161,22 +209,28 @@ class Order():
                 f.write(','.join(i.values()))
                 f.write('\n')
 
+    def AggregatedOrder(self):
+        #遍历根目录下文件夹
+        import os
+        import datetime
+        import shutil
+        self.TodayOrder = []
+        for root, dirs, files in os.walk(self.OrderSaveRoot):
+            for i in files:
+                if i.endswith('.csv'):
+                    self.TodayOrder.append(i)
+
+        pass
+
 
 if __name__ == '__main__':
-    info=BaseInformationSystem()
-    order = Order()
-    print("""ClearAllinRoot()会清空根目录所有文件，请新建文件夹以保存订单""")
-    print("Press 1 to generate order")
-    print(order.Order["SupermarketName"])
-    choice = input()
-    if choice == "1":
-
-        order.ClearAllinRoot()
-        for i in range(5):
-            order.GenerateOrder()
-            print("Order {} generated".format(i + 1))
-            order.Delay(2)#重名会覆盖
-            order.OrderSave()
-            print("Order {} saved".format(i + 1))
-    else:
-        print("Invalid input")
+    info = BaseInformationSystem()
+    """generator = OrderGenerator()
+    generator.ClearAllinRoot()
+    for i in range(3):
+        generator.GenerateOrder()
+        generator.OrderSave()
+        generator.Delay(1)
+    
+    print(info.TodayOrder)"""
+    info.AggregatedOrder()
