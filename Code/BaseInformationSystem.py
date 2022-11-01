@@ -209,18 +209,6 @@ class Order():
                 f.write(','.join(i.values()))
                 f.write('\n')
 
-    def AggregatedOrder(self):
-        #遍历根目录下文件夹
-        import os
-        import datetime
-        import shutil
-        self.TodayOrder = []
-        for root, dirs, files in os.walk(self.OrderSaveRoot):
-            for i in files:
-                if i.endswith('.csv'):
-                    self.TodayOrder.append(i)
-
-        pass
 
 
 if __name__ == '__main__':
