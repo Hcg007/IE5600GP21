@@ -43,6 +43,8 @@ class BaseInformationSystem():
                 f.write(','.join(i.values()))
                 f.write('\n')
 
+
+
     def ReadCsvKeys(self, csvpath):
         with open(csvpath, 'r') as f:
             keys = f.readline().split(',')
@@ -63,25 +65,41 @@ class BaseInformationSystem():
                 # 将path的\替换为/
                 path = path.replace('\\', '/')
                 Orderlist.append(path)
+        #print(Orderlist)
         for i in range(len(Orderlist)):
             csv = self.ReadCsv(Orderlist[i])
             Aggregationlist.append(OrderSaveRoot + Orderlist[i][25:35] + ".csv")
-            self.SaveCsv(csv, OrderSaveRoot + Orderlist[i][25:35] + ".csv")  # 同名会直接添加进去而不是覆盖
+
+            with open(Aggregationlist[i], 'a') as f:
+                keys = csv[0].keys()
+                f.write(','.join(keys))
+                f.write('\n')
+                for j in csv:
+                    f.write(','.join(j.values()))
+                    f.write('\n')
 
         # 删除重复项
         Aggregationlist = list(set(Aggregationlist))
         # 将产生的汇总表重新编号
         for i in Aggregationlist:
-            self.ReNumberAggregation(i)
+            self.ReAggregation(i)
 
-    def ReNumberAggregation(self, csvpath):  # 汇总表重新编号
+    def ReAggregation(self, csvpath):  # 汇总表重新编号
         try:
             csv = self.ReadCsv(csvpath)
+            for i in range(1,len(csv)):
+                if csv[i]["OrderNumber"]=="OrderNumber":
+                    csv[i]["OrderNumber"] = str(0)
+                else:
+                    continue
             for i in range(len(csv)):
                 csv[i]["ID"] = str(i + 1)
+            for i in csv:
+                if i["OrderNumber"] == "0":
+                    csv.remove(i)
             self.SaveCsv(csv, csvpath)
         except:
-            print("{}重新编号失败".format(csvpath))
+            print("{}失败".format(csvpath))
 
     def search(self, query):
         pass
@@ -138,6 +156,7 @@ class Order():
     def GenerateOrder(self):  # 生成单个
         import random
         import datetime
+        self.OrderInfo = []
         total_id = random.randint(1, 100)
         suppermarket_id = random.randint(1, len(self.SupermarketInfo))
         self.Ordertime = datetime.datetime.now()
@@ -174,7 +193,52 @@ class Order():
                 self.Ordertime =currentTime + datetime.timedelta(days=i)
                 self.OrderInfo[j]["OrderDate"]=self.Ordertime.strftime('%Y-%m-%d')
                 self.OrderInfo[j]["OrderNumber"]=self.Ordertime.strftime('%Y%m%d%H%M%S')
-                self.OrderSave()
+            self.OrderSave()
+
+    def AggregatedOrder(self):
+        # 遍历根目录下文件夹
+        import os
+        #OrderSaveRoot = self.OrderSaveRoot
+        Orderlist = []
+        Aggregationlist = []
+        for root, dirs, files in os.walk(self.OrderSaveRoot, topdown=True):
+            for file in files:
+                path = os.path.join(root, file)
+                # 将path的\替换为/
+                path = path.replace('\\', '/')
+                Orderlist.append(path)
+        # print(Orderlist)
+        for i in range(len(Orderlist)):
+            csv = self.ReadCsv(Orderlist[i])
+            Aggregationlist.append(self.OrderSaveRoot + Orderlist[i][25:35] + ".csv")
+
+            with open(Aggregationlist[i], 'a') as f:
+                keys = csv[0].keys()
+                f.write(','.join(keys))
+                f.write('\n')
+                for j in csv:
+                    f.write(','.join(j.values()))
+                    f.write('\n')
+
+        # 删除重复项
+        Aggregationlist = list(set(Aggregationlist))
+        # 将产生的汇总表重新编号
+        for i in Aggregationlist:
+            self.ReAggregation(i)
+
+    def ReAggregation(self, csvpath):  # 汇总表重新编号
+        try:
+            csv = self.ReadCsv(csvpath)
+            for i in range(1, len(csv)):
+                if csv[i]["ID"] == "ID":
+                    csv.remove(csv[i])
+                else:
+                    continue
+            for i in range(len(csv)):
+                csv[i]["ID"] = str(i + 1)
+            self.SaveCsv(csv, csvpath)
+        except:
+            print("{}重新编号失败".format(csvpath))
 
 
 
@@ -229,7 +293,8 @@ if __name__ == '__main__':
     for i in range(3):
         #generator.GenerateOrder()
         generator.GenerateOrderbyDays(3)
-        generator.OrderSave()
         generator.Delay(1)
 
     info.AggregatedOrder()
+
+
