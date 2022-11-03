@@ -43,8 +43,6 @@ class BaseInformationSystem():
                 f.write(','.join(i.values()))
                 f.write('\n')
 
-
-
     def ReadCsvKeys(self, csvpath):
         with open(csvpath, 'r') as f:
             keys = f.readline().split(',')
@@ -82,7 +80,7 @@ class BaseInformationSystem():
         Aggregationlist = list(set(Aggregationlist))
         # 将产生的汇总表重新编号
         for i in Aggregationlist:
-            self.ReAggregation(i)
+            self.ReAggregation(i)#
 
     def ReAggregation(self, csvpath):  # 汇总表重新编号
         try:
@@ -128,9 +126,10 @@ class Order():
         self.OriginalOrderInfo = self.ReadCsv("../Forms/Template/InventoryForm.csv")
         self.SupermarketInfo = self.ReadCsv("../Forms/Template/SupermarketForm.csv")
         self.OrderInfo = []
+        self.OrdersInfo={}
         self.Order = {"ID": "", "OrderNumber": "", "SupermarketName": "", "SupermarketNumber": "", "ItemNumber": "",
                       "ItemName": '', "Specification": "",
-                      "OrderAmount": "", "OrderDate": "", "Contact": "", "ContactNumber": ""}
+                      "OrderAmount": "", "OrderDate": "","EstDeliverDate":"", "Contact": "", "ContactNumber": ""}
         self.Ordertime = None
         self.TodayOrder = None
 
@@ -153,15 +152,22 @@ class Order():
 
         return infoList
 
-    def GenerateOrder(self):  # 生成单个
+    def GenerateOrder(self):
+        # 生成单个订单
         import random
         import datetime
         self.OrderInfo = []
         total_id = random.randint(1, 100)
         suppermarket_id = random.randint(1, len(self.SupermarketInfo))
         self.Ordertime = datetime.datetime.now()
+        self.Ordertime = self.Ordertime.replace(minute=0, second=0)
         self.Order["OrderDate"] = self.Ordertime.strftime('%Y-%m-%d')
+
+        self.Order["EstDeliverDate"] = (self.Ordertime + datetime.timedelta(days=1,hours=random.randint(9,17))).strftime('%Y-%m-%d %H:%M:%S')
+        #第字符10和11中间加空格
+        self.Order["EstDeliverDate"] = self.Order["EstDeliverDate"][:10] + " " + self.Order["EstDeliverDate"][10:]
         self.Order["OrderNumber"] = self.Ordertime.strftime('%Y%m%d%H%M%S')
+        self.Order["OrderNumber"] = str(self.Order["OrderNumber"])
         self.Order["SupermarketName"] = self.SupermarketInfo[suppermarket_id - 1]["SupermarketName"]
         self.Order["SupermarketNumber"] = self.SupermarketInfo[suppermarket_id - 1]["SupermarketNumber"]
         self.Order["ContactNumber"] = self.SupermarketInfo[suppermarket_id - 1]["ContactNumber"]
@@ -179,12 +185,15 @@ class Order():
             self.Order["Specification"] = self.OriginalOrderInfo[goodID - 1]["Specification"]
             # 单个订单的货品数量不大于当前库存
             maxNum = int(self.OriginalOrderInfo[goodID - 1]["CurrentInventory"])
-            self.Order["OrderAmount"] = str(random.randint(1, maxNum))
+            #均值30，方差为25的正态
+            OrderAmount = max(int(random.normalvariate(30, 5)),maxNum)
+            self.Order["OrderAmount"] = str(OrderAmount)
             self.OrderInfo.append(self.Order.copy())
 
         return self.OrderInfo
 
-    def GenerateOrderbyDays(self,days):  # 生成多个
+    def GenerateOrderbyDays(self,days):
+        # 生成即日起days天的订单
         import datetime
         currentTime=datetime.datetime.now()
         for i in range(days):
@@ -195,8 +204,9 @@ class Order():
                 self.OrderInfo[j]["OrderNumber"]=self.Ordertime.strftime('%Y%m%d%H%M%S')
             self.OrderSave()
 
+
     def AggregatedOrder(self):
-        # 遍历根目录下文件夹
+        # 遍历根目录下文件夹,将同一天的订单合并
         import os
         #OrderSaveRoot = self.OrderSaveRoot
         Orderlist = []
@@ -224,9 +234,10 @@ class Order():
         Aggregationlist = list(set(Aggregationlist))
         # 将产生的汇总表重新编号
         for i in Aggregationlist:
-            self.ReAggregation(i)
+            self.ReNumberAggregation(i)
 
-    def ReAggregation(self, csvpath):  # 汇总表重新编号
+    def ReNumberAggregation(self, csvpath):
+        # 汇总表重新编号
         try:
             csv = self.ReadCsv(csvpath)
             for i in range(1, len(csv)):
@@ -240,8 +251,36 @@ class Order():
         except:
             print("{}重新编号失败".format(csvpath))
 
+    def AggregatedOrderinDict(self):
+        # 生成每天的汇总订单
+        # Orderdict的key是日期，value是订单列表，即{date1:[order1,order2],date2:[order3,order4]..}
+        import os
+        OrdersPath = []
+        self.OrdersInfo={}
+        for root, dirs, files in os.walk(self.OrderSaveRoot, topdown=True):
+            for file in files:
+                path = os.path.join(root, file)
+                # 将path的\替换为/
+                path = path.replace('\\', '/')
+                OrdersPath.append(path)
+        for i in range(len(OrdersPath)):
+            csv=self.ReadCsv(OrdersPath[i])
+            key=OrdersPath[i][25:35]
+            #key一样的话，就合并
+            if key in self.OrdersInfo.keys():
+                self.OrdersInfo[key].extend(csv)
+            else:
+                self.OrdersInfo[key]=csv
 
+        self.ReNumberOrderDict()
 
+        return self.OrdersInfo
+
+    def ReNumberOrderDict(self):
+        # 重新编号
+        for value in self.OrdersInfo.values():
+            for i in range(len(value)):
+                value[i]["ID"]=str(i+1)
 
     def ClearAllinRoot(self):
         import os
@@ -295,6 +334,8 @@ if __name__ == '__main__':
         generator.GenerateOrderbyDays(3)
         generator.Delay(1)
 
-    info.AggregatedOrder()
+    generator.AggregatedOrderinDict()
+    print("没报错?nb!")
+
 
 
