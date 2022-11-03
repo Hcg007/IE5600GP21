@@ -1,0 +1,8 @@
+Order number,ItemNumber,ItemName,Specifications,Quantity,Unit,UnitPrice,TotalPrice,Supplier number,Supplier,PurchaseDate,Status,
+1,M0001,Pen,A,6,unit,1,6,S001,PTE1,2022/10/26,create,
+2,M0001,Pen,B,5,unit,2,10,S002,PTE2,2022/10/26,create,
+3,M0001,Pen,A,4,unit,1,4,S002,PTE2,2022/10/26,create,
+4,F00001,Apple,A,30,kg,1,30,S001,PTE1,2022/10/26,create,
+5,F00001,Apple,A,24,kg,1,24,S002,PTE2,2022/10/26,create,
+6,F00001,Apple,B,22,kg,2,44,S002,PTE2,2022/10/26,create,
+7,F00002,Pineapple,A,80,kg,1,80,S002,PTE2,2022/10/26,create,
