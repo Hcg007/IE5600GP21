@@ -1,4 +1,4 @@
-Order Number,ItemNumber,ItemName,Specifications,Quantity,Unit,UnitPrice,TotalPrice,Supplier number,Supplier,PurchaseDate,Status
+Order Number,ItemNumber,ItemName,Specifications,Quantity,Unit,UnitPrice,TotalPrice,Supplier Number,Supplier,PurchaseDate,Status
 1,M0001,Pen,A,6,unit,1,6,S001,PTE1,2022/10/26,create
 2,M0001,Pen,B,5,unit,2,10,S002,PTE2,2022/10/26,create
 3,M0001,Pen,A,4,unit,1,4,S002,PTE2,2022/10/26,create
