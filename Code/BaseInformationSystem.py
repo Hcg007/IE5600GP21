@@ -7,6 +7,8 @@ class BaseInformationSystem():
         self.InboundInfo = self.ReadCsv("../Forms/Template/InboundForm.csv")
         self.OutboundInfo = self.ReadCsv("../Forms/Template/OutboundForm.csv")
         self.PurchaseInfo = self.ReadCsv("../Forms/Template/PurchaseForm.csv")
+        self.Returnsupplier = self.ReadCsv("../Forms/Template/ReturnsupplierForm.csv")
+        self.Returnwarehouse = self.ReadCsv("../Forms/Template/ReturnwarehouseForm.csv")
         self.OrderAggregationInfo = None  # 当日订单汇总
         # 只提取索引
         self.InventoryInfoKeys = self.ReadCsvKeys("../Forms/Template/InventoryForm.csv")
