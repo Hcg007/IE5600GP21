@@ -1,13 +1,26 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov  4 18:53:57 2022
+
+@author: ql
+"""
 
 from BaseInformationSystem import BaseInformationSystem
 class returnin(BaseInformationSystem):
     def __init__(self):
         BaseInformationSystem.__init__(self)
-
+  
     def return_auditinventory(self):
-        for i in range(len(self.ReturnwarehouseKeys)-1):
-            if i in self.InventoryInfoKeys:
-                pass
+        
+        if 'Returninggoods' in self.ReturnwarehouseKeys:
+            pass
+        else:
+            print('unvalid returning order')
+            return
+        for i in self.Returnwarehouse:
+            for j in self.InventoryInfo:
+                if i['ItemNumber'] == j['ItemNumber']:
+                    break
             else:
                 print('unvalid returning order')
                 return
@@ -15,9 +28,16 @@ class returnin(BaseInformationSystem):
             print('Approved order')
                 
     def return_auditsupplier(self):
-        for i in range(len(self.Returnsupplierkeys)-1):
-            if i in self.InventoryInfoKeys:
-                pass
+
+        if 'Returninggoods' in self.Returnsupplierkeys:
+            pass
+        else:
+            print('unvalid returning order')
+            return
+        for i in self.Returnsupplierkeys:
+            for j in self.InventoryInfo:
+                if i['ItemNumber'] == j['ItemNumber']:
+                    break
             else:
                 print('unvalid returning order')
                 return
@@ -29,15 +49,15 @@ class returnin(BaseInformationSystem):
         for j in self.Returnwarehouse:
             for i in self.InventoryInfo:
                 if i['ItemNumber'] == j['ItemNumber']:
-                    Max = int(i['MaxInventory'])
+                    Max = 300
                     CI1 = int(i['CurrentInventory'])
-                    CI2 = int(j['CurrentInventory'])
+                    CI2 = int(j['Returninggoods'])
                     CI = CI1 + CI2
                     if CI > Max:
                         print('The maximum storage capacity of {} is exceeded' . format(i['ItemNumber']))
                         continue
                     else:
-                        i['CurrentInventory'] = str(CI)
+                        i['Returninggoods'] = str(CI)
                         number.append(j)
                         break
                         
@@ -54,8 +74,8 @@ class returnin(BaseInformationSystem):
             pass
             
         print('='*100)         
-        print('left in inventory: \n',self.InventoryInfo)
-        return self.InventoryInfo, self.Returnwarehouse
+        print('left in Returnwarehouse: \n',self.Returnwarehouse)
+        return self.Returnwarehouse, self.InventoryInfo
         
      
     def return_shangjia(self):
@@ -64,13 +84,13 @@ class returnin(BaseInformationSystem):
             for j in self.InventoryInfo:
                 if i['ItemNumber']==j['ItemNumber']:
                     CI1 = int(i['CurrentInventory'])
-                    CI2 = int(j['CurrentInventory'])
+                    CI2 = int(j['Returninggoods'])
                     if CI1 > CI2:
                         print('The number of {} returns exceeds the inventory' . format(i['ItemNumber']))
                         continue
                     else:
                         CI = CI2 - CI1
-                        j['CurrentInventory'] = str(CI)
+                        j['Returninggoods'] = str(CI)
                         number.append(i)
                         break
             else:
@@ -109,8 +129,11 @@ class returnin(BaseInformationSystem):
                 reasontable[i] = 1
         print('The reason returning to inventory:\n', reasontable)
     
-
-
+    
+    
+if __name__ == '__main__':
+    s=returnin()
+    s.return_cangku()
     
 
 
