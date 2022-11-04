@@ -55,7 +55,7 @@ class returnin(BaseInformationSystem):
             
         print('='*100)         
         print('left in inventory: \n',self.InventoryInfo)
-        return self.outputcsb(self.InventoryInfo)
+        return self.InventoryInfo, self.Returnwarehouse
         
      
     def return_shangjia(self):
