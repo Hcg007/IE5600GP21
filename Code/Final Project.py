@@ -1,15 +1,8 @@
 
-class returnin():
+from BaseInformationSystem import BaseInformationSystem
+class returnin(BaseInformationSystem):
     def __init__(self):
-        csv1 = 'data/InventoryForm.csv'
-        csv2 = 'data/退库订单.csv'
-        csv3 = 'data/退货订单.csv'
-        self.list1=self.csv2Dict(csv1)
-        self.list2=self.csv2Dict(csv2)
-        self.list3=self.csv2Dict(csv3)
-        self.key1=self.ReadCsvKeys(csv1)
-        self.key2=self.ReadCsvKeys(csv2)
-        self.key3=self.ReadCsvKeys(csv3)
+        BaseInformationSystem.__init__(self)
         
     def csv2Dict(self, csv):
         with open(csv, 'r') as f:
@@ -40,8 +33,8 @@ class returnin():
     
     
     def return_auditinventory(self):
-        for i in self.key1:
-            if i in self.key2:
+        for i in range(len(self.ReturnwarehouseKeys)-1):
+            if i in self.InventoryInfoKeys:
                 pass
             else:
                 print('unvalid returning order')
@@ -50,8 +43,8 @@ class returnin():
             print('Approved order')
                 
     def return_auditsupplier(self):
-        for i in self.key1:
-            if i in self.key3:
+        for i in range(len(self.Returnsupplierkeys)-1):
+            if i in self.InventoryInfoKeys:
                 pass
             else:
                 print('unvalid returning order')
@@ -61,8 +54,8 @@ class returnin():
     
     def return_cangku(self):
         number=[]
-        for j in self.list2:
-            for i in self.list1:
+        for j in self.Returnwarehouse:
+            for i in self.InventoryInfo:
                 if i['ItemNumber'] == j['ItemNumber']:
                     Max = int(i['MaxInventory'])
                     CI1 = int(i['CurrentInventory'])
@@ -77,26 +70,26 @@ class returnin():
                         break
                         
             else:
-                for i in self.list2:
+                for i in self.Returnwarehouse:
                     number.append(i)
                     i.pop('backreason')
-                    self.list1.append(i)
+                    self.InventoryInfo.append(i)
        
         for n in number:
-            if n in self.list2:
-                self.list2.remove(n)
+            if n in self.Returnwarehouse:
+                self.Returnwarehouse.remove(n)
         else:
             pass
             
         print('='*100)         
-        print('left in inventory: \n',self.list1)
-        return self.outputcsb(self.list1)
+        print('left in inventory: \n',self.InventoryInfo)
+        return self.outputcsb(self.InventoryInfo)
         
      
     def return_shangjia(self):
         number=[]
-        for i in self.list3:
-            for j in self.list1:
+        for i in self.Returnsupplier:
+            for j in self.InventoryInfo:
                 if i['ItemNumber']==j['ItemNumber']:
                     CI1 = int(i['CurrentInventory'])
                     CI2 = int(j['CurrentInventory'])
@@ -112,18 +105,18 @@ class returnin():
                 print('The items {} do not exist in the warehouse' . format(i['ItemNumber']))
                    
         for n in number:
-            if n in self.list3:
-                self.list3.remove(n)
+            if n in self.Returnsupplier:
+                self.Returnsupplier.remove(n)
         else:
             pass
         print('='*100) 
-        print('left in inventory: \n', self.list1)
-        return self.list1, self.list3
+        print('left in inventory: \n', self.InventoryInfo)
+        return self.InventoryInfo, self.Returnsupplier
     
     def show_reasoninventory(self):
         reason=[]
         reasontable = dict()
-        for i in self.list2:
+        for i in self.Returnwarehouse:
             reason.append(i['backreason'])
         for i in reason:
             if i in reasontable:
@@ -135,7 +128,7 @@ class returnin():
     def show_reasonsupplier(self):
         reason=[]
         reasontable = dict()
-        for i in self.list3:
+        for i in self.Returnsupplier:
             reason.append(i['backreason'])
         for i in reason:
             if i in reasontable:
@@ -145,27 +138,7 @@ class returnin():
         print('The reason returning to inventory:\n', reasontable)
     
     
-    def outputcsb(self,dataset1):
-        key=[]
-        total=[]
-        for i in dataset1[0]:
-            for n in i:
-                key.append(n)
-        total.append(key)
-        for i in dataset1:
-            values=[]    
-            for key,value in i.items():
-                values.append(value)
-            total.append(values)
    
-        
-        
-        with open('data/dataset.csv', 'w') as f: 
-            for row in total: 
-                s = " " .join (row)
-                s=s.replace(' ',',')
-                f.write(s)
-                f.write('\n')
 
             
     
