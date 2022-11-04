@@ -16,6 +16,8 @@ class BaseInformationSystem():
         self.InboundInfoKeys = self.ReadCsvKeys("../Forms/Template/InboundForm.csv")
         self.OutboundInfoKeys = self.ReadCsvKeys("../Forms/Template/OutboundForm.csv")
         self.PurchaseInfoKeys = self.ReadCsvKeys("../Forms/Template/PurchaseForm.csv")
+        self.Returnsupplierkeys = self.ReadCsvKeys("../Forms/Template/ReturnsupplierForm.csv")
+        self.ReturnwarehouseKeys = self.ReadCsvKeys("../Forms/Template/ReturnwarehouseForm.csv")
 
     def ReadCsv(self, csvpath):
         with open(csvpath, 'r') as f:
