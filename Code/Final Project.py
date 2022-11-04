@@ -3,35 +3,7 @@ from BaseInformationSystem import BaseInformationSystem
 class returnin(BaseInformationSystem):
     def __init__(self):
         BaseInformationSystem.__init__(self)
-        
-    def csv2Dict(self, csv):
-        with open(csv, 'r') as f:
-            infoList=[]
-            keys = f.readline().split(',')
-            for i in range(len(keys)):
-                keys[i] = keys[i].replace(' ', '')
-                keys[i] = keys[i].replace('\n', '')
-            for i in f:
-                infoList.append(i.split(','))
-            for i in range(len(infoList)):
-                for j in range(len(infoList[i])):
-                    infoList[i][j] = infoList[i][j].replace(' ', '')
-                    infoList[i][j] = infoList[i][j].replace('\n', '')
 
-            for i in range(len(infoList)):
-                infoList[i] = dict(zip(keys, infoList[i]))
-
-        return infoList
-    
-    def ReadCsvKeys(self, csvpath):
-            with open(csvpath, 'r') as f:
-                keys = f.readline().split(',')
-                for i in range(len(keys)):
-                    keys[i] = keys[i].replace(' ', '')
-                    keys[i] = keys[i].replace('\n', '')
-            return keys
-    
-    
     def return_auditinventory(self):
         for i in range(len(self.ReturnwarehouseKeys)-1):
             if i in self.InventoryInfoKeys:
@@ -137,14 +109,7 @@ class returnin(BaseInformationSystem):
                 reasontable[i] = 1
         print('The reason returning to inventory:\n', reasontable)
     
-    
-   
 
-            
-    
-if __name__ == '__main__':
-    s=returnin()
-    s.return_cangku()
 
     
 
