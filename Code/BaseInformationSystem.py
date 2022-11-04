@@ -183,10 +183,10 @@ class Order():
             self.Order["ItemNumber"] = self.OriginalOrderInfo[goodID - 1]["ItemNumber"]
             self.Order["ItemName"] = self.OriginalOrderInfo[goodID - 1]["ItemName"]
             self.Order["Specification"] = self.OriginalOrderInfo[goodID - 1]["Specification"]
-            # 单个订单的货品数量不大于当前库存
-            maxNum = int(self.OriginalOrderInfo[goodID - 1]["CurrentInventory"])
-            #均值30，方差为25的正态
-            OrderAmount = max(int(random.normalvariate(30, 5)),maxNum)
+            # 单个订单的货品数量不大于60
+            maxNum = 60
+            #均值40，方差为25的正态
+            OrderAmount = min(int(random.normalvariate(40, 5)),maxNum)
             self.Order["OrderAmount"] = str(OrderAmount)
             self.OrderInfo.append(self.Order.copy())
 
