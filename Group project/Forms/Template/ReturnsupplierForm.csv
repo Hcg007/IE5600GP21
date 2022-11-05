@@ -1,0 +1,51 @@
+ID,ItemNumber,ItemName,Specification,Returningnumbers,backreason
+1,F00000,ItemA,A,1,Packing damage
+2,F00001,ItemA,B,2,Packing damage
+3,F00002,ItemA,C,2,Packing damage
+8,F00007,ItemB,D,2,Packing damage
+9,F00008,ItemC,A,2,Packing damage
+10,F00009,ItemC,B,2,Specification error
+11,F00011,ItemC,D,2,Specification error
+22,F00022,ItemF,C,2,Specification error
+23,F00023,ItemF,D,2,Product quality problem
+24,F00024,ItemG,A,2,Packing damage
+25,F00025,ItemG,B,2,Packing damage
+26,F00027,ItemG,D,2,Packing damage
+29,F00029,ItemH,B,2,Packing damage
+38,F00038,ItemJ,C,2,Packing damage
+39,F00039,ItemJ,D,2,Specification error
+40,F00040,ItemK,A,2,Specification error
+42,F00042,ItemK,C,2,Goods overdue
+43,F00043,ItemK,D,2,Goods overdue
+44,F00044,ItemL,A,2,Specification error
+46,F00046,ItemL,C,2,Specification error
+47,F00047,ItemL,D,2,Goods overdue
+48,F00048,ItemM,A,1,Goods overdue
+49,F00049,ItemM,B,2,Specification error
+50,F00050,ItemM,C,2,Specification error
+51,F00051,ItemM,D,1,Goods overdue
+52,F00052,ItemN,A,2,Goods overdue
+53,F00053,ItemN,B,2,Product quality problem
+54,F00054,ItemN,C,2,Product quality problem
+55,F00055,ItemN,D,2,Product quality problem
+56,F00056,ItemO,A,2,Product quality problem
+57,F00057,ItemO,B,2,Product quality problem
+58,F00058,ItemO,C,2,Product quality problem
+59,F00059,ItemO,D,2,Product quality problem
+68,F00068,ItemR,A,2,Product quality problem
+69,F00069,ItemR,B,2,Product quality problem
+70,F00070,ItemR,C,2,Product quality problem
+71,F00071,ItemR,D,2,Packing damage
+72,F00072,ItemS,A,2,Packing damage
+76,F00076,ItemT,A,2,Packing damage
+77,F00077,ItemT,B,2,Packing damage
+78,F00078,ItemT,C,2,Packing damage
+79,F00079,ItemT,D,2,Packing damage
+80,F00080,ItemU,A,2,Packing damage
+81,F00081,ItemU,B,2,Packing damage
+82,F00082,ItemU,C,2,Packing damage
+84,F00084,ItemV,A,2,Packing damage
+85,F00085,ItemV,B,2,Packing damage
+88,F00088,ItemW,A,2,Packing damage
+89,F00089,ItemW,B,2,Packing damage
+90,F00090,ItemW,C,5,Packing damage
