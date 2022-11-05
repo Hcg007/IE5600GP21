@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Nov  4 18:53:57 2022
 @author: ql
@@ -11,7 +10,7 @@ class returnin(BaseInformationSystem):
   
     def return_auditinventory(self):
         
-        if 'Returninggoods' in self.ReturnwarehouseKeys:
+        if 'Returningnumbers' in self.ReturnwarehouseKeys:
             pass
         else:
             print('unvalid returning order')
@@ -28,12 +27,12 @@ class returnin(BaseInformationSystem):
                 
     def return_auditsupplier(self):
 
-        if 'Returninggoods' in self.Returnsupplierkeys:
+        if 'Returningnumbers' in self.Returnsupplierkeys:
             pass
         else:
             print('unvalid returning order')
             return
-        for i in self.Returnsupplierkeys:
+        for i in self.Returnsupplier:
             for j in self.InventoryInfo:
                 if i['ItemNumber'] == j['ItemNumber']:
                     break
@@ -53,10 +52,10 @@ class returnin(BaseInformationSystem):
                     CI2 = int(j['Returningnumbers'])
                     CI = CI1 + CI2
                     if CI > Max:
-                        print('The maximum storage capacity of {} is exceeded' . format(i['ItemNumber']))
+                        print('The maximum storage CurrentInventorycapacity of {} is exceeded' . format(i['ItemNumber']))
                         continue
                     else:
-                        i['Returninggoods'] = str(CI)
+                        i['CurrentInventory'] = str(CI)
                         number.append(j)
                         break
                         
@@ -71,9 +70,7 @@ class returnin(BaseInformationSystem):
                 self.Returnwarehouse.remove(n)
         else:
             pass
-            
-        print('='*100)         
-        print('left in Returnwarehouse: \n',self.Returnwarehouse)
+
         return self.Returnwarehouse, self.InventoryInfo
         
      
@@ -82,14 +79,14 @@ class returnin(BaseInformationSystem):
         for i in self.Returnsupplier:
             for j in self.InventoryInfo:
                 if i['ItemNumber']==j['ItemNumber']:
-                    CI1 = int(i['CurrentInventory'])
-                    CI2 = int(j['Returningnumbers'])
-                    if CI1 > CI2:
+                    CI1 = int(j['CurrentInventory'])
+                    CI2 = int(i['Returningnumbers'])
+                    if CI2 > CI1:
                         print('The number of {} returns exceeds the inventory' . format(i['ItemNumber']))
                         continue
                     else:
-                        CI = CI2 - CI1
-                        j['Returninggoods'] = str(CI)
+                        CI = CI1 - CI2
+                        j['CurrentInventory'] = str(CI)
                         number.append(i)
                         break
             else:
@@ -100,8 +97,6 @@ class returnin(BaseInformationSystem):
                 self.Returnsupplier.remove(n)
         else:
             pass
-        print('='*100) 
-        print('left in inventory: \n', self.InventoryInfo)
         return self.InventoryInfo, self.Returnsupplier
     
     def show_reasoninventory(self):
@@ -131,8 +126,8 @@ class returnin(BaseInformationSystem):
     
     def num_data(self):
           print('***********************Returning management system***********************')
-          print('1.Return goods to supplier')
-          print('2.Return goods back to inventory')
+          print('1.Return goods back to inventory')
+          print('2.Return goods to supplier')
           print('3.Show return inventory reason')
           print('4.Show return supplier reason')
           print('5.Log out of the system')
@@ -146,11 +141,11 @@ class returnin(BaseInformationSystem):
 
             if num_data == '1':
                 self.return_auditinventory()
-                self.return_shangjia()
+                self.return_cangku()
 
             elif num_data == '2':
                 self.return_auditsupplier()
-                self.return_cangku()
+                self.return_shangjia()
 
             elif num_data == '3':
                 self.show_reasoninventory()
@@ -168,6 +163,11 @@ class returnin(BaseInformationSystem):
                     print('error message')
             else:
                 pass
+
+    
+if __name__ == '__main__':
+    s=returnin()
+    s.run()
 
     
 
