@@ -51,7 +51,7 @@ class returnin(BaseInformationSystem):
                 if i['ItemNumber'] == j['ItemNumber']:
                     Max = 300
                     CI1 = int(i['CurrentInventory'])
-                    CI2 = int(j['Returninggoods'])
+                    CI2 = int(j['Returningnumbers'])
                     CI = CI1 + CI2
                     if CI > Max:
                         print('The maximum storage capacity of {} is exceeded' . format(i['ItemNumber']))
@@ -84,7 +84,7 @@ class returnin(BaseInformationSystem):
             for j in self.InventoryInfo:
                 if i['ItemNumber']==j['ItemNumber']:
                     CI1 = int(i['CurrentInventory'])
-                    CI2 = int(j['Returninggoods'])
+                    CI2 = int(j['Returningnumbers'])
                     if CI1 > CI2:
                         print('The number of {} returns exceeds the inventory' . format(i['ItemNumber']))
                         continue
