@@ -7,7 +7,7 @@ Created on Wed Oct 26 22:48:33 2022
 import datetime
 from BaseInformationSystem import Order
      
-class OrderProcessing:
+class Replenishing:
     
     def __init__(self, warehouse):
         self.rush_order_num = 1
@@ -137,7 +137,7 @@ class OrderProcessing:
         
     
     def Simulation(self, warehouse):
-        print('***********************OrderProcessing System***********************')
+        print('***********************Replenishing System***********************')
         x = True
         if_3 = False
         while x:
