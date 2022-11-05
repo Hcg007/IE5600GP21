@@ -1,4 +1,4 @@
-ID,ItemNumber,ItemName,Specification,CurrentInventory,backreason
+ID,ItemNumber,ItemName,Specification,Returningnumbers,backreason
 1,F00000,ItemA,A,22,Packing damage
 2,F00001,ItemA,B,33,Packing damage
 11,F00011,ItemC,D,60,Specification error
