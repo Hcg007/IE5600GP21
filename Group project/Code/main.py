@@ -4,7 +4,7 @@ Created on Wed Oct 26 23:23:53 2022
 
 @author: Loris
 """
-from OrderProcessing import OrderProcessing
+from Replenishing import Replenishing
 from BaseInformationSystem import BaseInformationSystem
 from purchasing_code import PurchasingOrder
 from inventory_management import InventoryManagement
@@ -14,11 +14,11 @@ from Returning import returnin
 if __name__ == '__main__':
     info = BaseInformationSystem()
     
-    op = OrderProcessing(info) 
-    op.Simulation(info)
+    rep = Replenishing(info) 
+    rep.Simulation(info)
     
     purchase_fuc=PurchasingOrder()
-    purchase_fuc.PurchaseFunc(info, op)
+    purchase_fuc.PurchaseFunc(info, rep)
     
     inventory = InventoryManagement()
     inventory.purchase_inbound(info)
