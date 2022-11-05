@@ -79,7 +79,7 @@ class OrderProcessing:
                     else:
                         product_info.update({c: num})
                         if_more = input('Do you need anything else? (Y/N): ')
-                        self.order_list.append({'Contact': user, 'ContactNumber': contact, 'EstDeliverDate': delivery_dt, 'ID':str(len(self.order_list)), 'ItemName': name, 'ItemNumber': c, 'OrderAmount': num, 'OrderDate': delivery_dt.date(), 'OrderNumber': 'R{}'.format(self.rush_order_num), 'Specification': sp, 'SupermarketName': bn[:2] + bn[4],'SupermarketNumber': bn})
+                        self.order_list.append({'Contact': user, 'ContactNumber': contact, 'EstDeliverDate': delivery_dt, 'ID':str(len(self.order_list)+1), 'ItemName': name, 'ItemNumber': c, 'OrderAmount': num, 'OrderDate': delivery_dt.date(), 'OrderNumber': 'R{}'.format(self.rush_order_num), 'Specification': sp, 'SupermarketName': bn[:2] + bn[4],'SupermarketNumber': bn})
                         if if_more == 'Y':
                             break
                         
