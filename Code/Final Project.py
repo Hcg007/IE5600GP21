@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Nov  4 18:53:57 2022
-
 @author: ql
 """
 
@@ -128,15 +127,52 @@ class returnin(BaseInformationSystem):
             else:
                 reasontable[i] = 1
         print('The reason returning to inventory:\n', reasontable)
+        
     
-    
+    def num_data(self):
+          print('***********************Returning management system***********************')
+          print('1.Return goods to supplier')
+          print('2.Return goods back to inventory')
+          print('3.Show return inventory reason')
+          print('4.Show return supplier reason')
+          print('5.Log out of the system')
+          return input('Please input the function number：')
+      
+        
+    def run(self):
+        while (True):
+
+            num_data = self.num_data()
+
+            if num_data == '1':
+                self.return_auditinventory()
+                self.return_cangku()
+
+            elif num_data == '2':
+                self.return_auditsupplier()
+                self.return_shangjia()
+
+            elif num_data == '3':
+                self.show_reasoninventory()
+
+            elif num_data == '4':
+                self.show_reasonsupplier()
+           
+            elif num_data == '5':
+                quit = input('Do you want to log out? YES or NO？')
+                if quit == 'YES':
+                    break
+                elif quit == 'NO':
+                    self.num_data()
+                else:
+                    print('error message')
+            else:
+                pass
+
     
 if __name__ == '__main__':
     s=returnin()
-    s.return_cangku()
-    
-
-
+    s.run()
 
 
 
