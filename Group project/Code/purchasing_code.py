@@ -22,10 +22,10 @@ class PurchasingOrder:
         
     def CreateOrder(self,order_num,NewOrder):
         
+    #This function is used to convert the automatic replenish system output to formal purchase list
+        
         self.item_num=NewOrder[0]
-        self.quantity=str(NewOrder[1])
-        
-        
+        self.quantity=str(NewOrder[1])        
         
         order_num=str(order_num)
         
@@ -54,8 +54,12 @@ class PurchasingOrder:
  
     def ApproveOrder(self,new_purchase_lst):
         
+    #This function is used to approve the newly created orders,
+    #we assume that once the order been approved, it will be sent to supplier
+        
         purchase_lst=self.ReadCsv('../Forms/Template/PurchaseForm.csv')
-        print('New Order=',new_purchase_lst)
+        new_num=len(new_purchase_lst)
+        print('{} new orders have been created.'.format(new_num))
         approve=input("approve the order(Yes/No):")
         if approve=='Yes':
             for new_order in new_purchase_lst:
@@ -65,20 +69,27 @@ class PurchasingOrder:
             print('Approve Successfully!')
                         
             self.SaveCsv(purchase_lst,'../Forms/Template/PurchaseForm.csv')
-    
-        
+            
                                             
         
     def QueryOrder(self):
+        
+    #This function is used to upload the status of purchasing order and query the order, 
+    #when calling this function, the system will check the inbound list and upload the order status,
+    #we assume that the order is finished when the warehouse checked and inbound the items
+        
         purchase_lst=self.ReadCsv('../Forms/Template/PurchaseForm.csv')
         inbound=self.ReadCsv('../Forms/Template/PurchaseForm.csv')
+        m=0
         for order in purchase_lst:
             for item in inbound:
                 if order['OrderNumber']==item['ID']:
                     order['Status']='Finish'
-        self.SaveCsv(purchase_lst,'../Forms/Template/PurchaseForm.csv')                
+                    m+=1
+        self.SaveCsv(purchase_lst,'../Forms/Template/PurchaseForm.csv')
+        print('Update successfully! {} orders have been finished.'.format(m))
         
-        queryorder=input('Enter the order number:')
+        queryorder=input('Enter the order number to query:')
         if int(queryorder) > len(purchase_lst):
             print('Order does not exist!')
         else:    
@@ -88,10 +99,12 @@ class PurchasingOrder:
                 else:
                     print(order)
         
-            
-        
+         
         
     def EditOrder(self):
+        
+    #This function is used to edit the order information, such as quantity 
+        
         purchase_lst=self.ReadCsv('../Forms/Template/PurchaseForm.csv')
         editorder=input('Enter the order number:')
         if int(editorder) > len(purchase_lst):
@@ -106,14 +119,16 @@ class PurchasingOrder:
                         if edit == part:
                             order[part]=input('Edit to:')
                             print('Edit successfully!')
-                        
-            
+                            
         self.SaveCsv(purchase_lst,'../Forms/Template/PurchaseForm.csv')
-    
     
     
                 
     def CancelOrder(self):
+        
+    #If the goods cannot arrive the warehouse on time, the order will be canceled,
+    #and the automatic replenish system will generate a new order list next time
+        
         purchase_lst=self.ReadCsv('../Forms/Template/PurchaseForm.csv')
         cancelorder=input('Enter the order number:')
         for order in purchase_lst:
@@ -163,7 +178,7 @@ class PurchasingOrder:
     
     
     def ReNumberAggregation(self,csvpath):
-        # 表重新编号
+        # renumber the list
         try:
             csv = self.ReadCsv(csvpath)
             for i in range(1, len(csv)):
@@ -175,14 +190,17 @@ class PurchasingOrder:
                 csv[i]["OrderNumber"] = str(i + 1)
             self.SaveCsv(csv, csvpath)
         except:
-            print("{}重新编号失败".format(csvpath))
+            print("{} fail to renumber".format(csvpath))
         
-    
+
     def PurchaseFunc(self, info, op):
-            
-        print('*'*70)
-        print('Welcome to Purchasing Order Management Module!')
         
+        #This module provides functions to deal with purchasing orders, when administrator enter this module, 
+        #this system will automatically check the new orders that have been created by the automatic replenish sysytem,
+        #and add the new orders to the csv file
+        
+        print('***********************Purchasing Order management system***********************')
+                    
         purchase_lst=info.PurchaseInfo
         new_purchase_lst=[]
         order_num=1
@@ -205,21 +223,27 @@ class PurchasingOrder:
             
         
         while True:
-            print('*'*70)
-            operation=input('Please select the function:\n\tA = Approve order\n\tB = Query order\n\tC = Edit order\n\tD = Cancel order\n\tE = Return to desktop\n\n\tChoice=')
-            if operation == 'A':
+            print('='*60)
+            print('1.Approve Order')
+            print('2.Update and Query Order')
+            print('3.Edit Order')
+            print('4.Cancel Order')
+            print('5.Log out of the system')
+            operation = input('Please input the function number：')
+            
+            if operation == '1':
                 self.ApproveOrder(new_purchase_lst)
                 
-            elif operation == 'B':
+            elif operation == '2':
                 self.QueryOrder()
                            
-            elif operation == 'C':
+            elif operation == '3':
                 self.EditOrder()
                 
-            elif operation == 'D':
+            elif operation == '4':
                 self.CancelOrder()
             
-            elif operation == 'E':
+            elif operation == '5':
     
                 break
             
