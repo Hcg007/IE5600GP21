@@ -1,4 +1,4 @@
-ID,ItemNumber,ItemName,Specification,Returninggoods,backreason
+ID,ItemNumber,ItemName,Specification,Returningnumbers,backreason
 1,F00000,ItemA,A,22,Packing damage
 2,F00001,ItemA,B,33,Packing damage
 3,F00002,ItemA,C,55,Packing damage
