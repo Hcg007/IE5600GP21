@@ -170,15 +170,14 @@ class SupplierSystem():
                       print(self.K3['ID'][i],'expired')
     def supplier_function(self):
         while True:
-               print("\n\n\n-------------------------")
-               print("#  System #")
+               print('***********************Returning management system***********************')
                print("1. Show Information")
                print("2. Add supplier")
                print("3. Update supplier")
                print("4. Delete supplier")
                print("5. Check expire time")
                print("6. Drop out")
-               print("-------------------------")
+               print("==================================")
                selectFun=int(input("Please choose the function："))
                if selectFun==1:
                   self.ShowInfor()
