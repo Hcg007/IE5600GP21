@@ -196,7 +196,7 @@ class PurchasingOrder:
     def PurchaseFunc(self, info, op):
         
         #This module provides functions to deal with purchasing orders, when administrator enter this module, 
-        #this system will automatically check the new orders that have been created by the automatic replenish sysytem,
+        #this system will automatically check the new orders that have been created by the automatic replenish system,
         #and add the new orders to the csv file
         
         print('***********************Purchasing Order management system***********************')
