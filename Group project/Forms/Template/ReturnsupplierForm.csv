@@ -1,0 +1,51 @@
+ID,ItemNumber,ItemName,Specification,Returningnumbers,backreason
+1,F00000,ItemA,A,22,Packing damage
+2,F00001,ItemA,B,33,Packing damage
+3,F00002,ItemA,C,55,Packing damage
+8,F00007,ItemB,D,22,Packing damage
+9,F00008,ItemC,A,22,Packing damage
+10,F00009,ItemC,B,33,Specification error
+11,F00011,ItemC,D,60,Specification error
+22,F00022,ItemF,C,21,Specification error
+23,F00023,ItemF,D,11,Product quality problem
+24,F00024,ItemG,A,22,Packing damage
+25,F00025,ItemG,B,22,Packing damage
+26,F00027,ItemG,D,33,Packing damage
+29,F00029,ItemH,B,60,Packing damage
+38,F00038,ItemJ,C,33,Packing damage
+39,F00039,ItemJ,D,55,Specification error
+40,F00040,ItemK,A,60,Specification error
+42,F00042,ItemK,C,21,Goods overdue
+43,F00043,ItemK,D,11,Goods overdue
+44,F00044,ItemL,A,22,Specification error
+46,F00046,ItemL,C,21,Specification error
+47,F00047,ItemL,D,20,Goods overdue
+48,F00048,ItemM,A,35,Goods overdue
+49,F00049,ItemM,B,14,Specification error
+50,F00050,ItemM,C,20,Specification error
+51,F00051,ItemM,D,10,Goods overdue
+52,F00052,ItemN,A,5,Goods overdue
+53,F00053,ItemN,B,36,Product quality problem
+54,F00054,ItemN,C,66,Product quality problem
+55,F00055,ItemN,D,22,Product quality problem
+56,F00056,ItemO,A,22,Product quality problem
+57,F00057,ItemO,B,33,Product quality problem
+58,F00058,ItemO,C,55,Product quality problem
+59,F00059,ItemO,D,60,Product quality problem
+68,F00068,ItemR,A,14,Product quality problem
+69,F00069,ItemR,B,20,Product quality problem
+70,F00070,ItemR,C,10,Product quality problem
+71,F00071,ItemR,D,5,Packing damage
+72,F00072,ItemS,A,36,Packing damage
+76,F00076,ItemT,A,33,Packing damage
+77,F00077,ItemT,B,55,Packing damage
+78,F00078,ItemT,C,60,Packing damage
+79,F00079,ItemT,D,20,Packing damage
+80,F00080,ItemU,A,21,Packing damage
+81,F00081,ItemU,B,11,Packing damage
+82,F00082,ItemU,C,22,Packing damage
+84,F00084,ItemV,A,21,Packing damage
+85,F00085,ItemV,B,20,Packing damage
+88,F00088,ItemW,A,20,Packing damage
+89,F00089,ItemW,B,10,Packing damage
+90,F00090,ItemW,C,5,Packing damage

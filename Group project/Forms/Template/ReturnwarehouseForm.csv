@@ -1,0 +1,27 @@
+ID,ItemNumber,ItemName,Specification,Returningnumbers,backreason
+1,F00000,ItemA,A,22,Packing damage
+2,F00001,ItemA,B,33,Packing damage
+11,F00011,ItemC,D,60,Specification error
+23,F00023,ItemF,D,11,Product quality problem
+24,F00024,ItemG,A,22,Packing damage
+38,F00038,ItemJ,C,33,Product quality problem
+39,F00039,ItemJ,D,55,Product quality problem
+40,F00040,ItemK,A,60,Product quality problem
+42,F00042,ItemK,C,21,Product quality problem
+44,F00044,ItemL,A,22,Product quality problem
+46,F00046,ItemL,C,21,Specification error
+47,F00047,ItemL,D,20,Goods overdue
+54,F00054,ItemN,C,66,Product quality problem
+55,F00055,ItemN,D,22,Product quality problem
+56,F00056,ItemO,A,22,Product quality problem
+59,F00059,ItemO,D,60,Product quality problem
+68,F00068,ItemR,A,14,Product quality problem
+72,F00072,ItemS,A,36,Packing damage
+80,F00080,ItemU,A,21,Packing damage
+81,F00081,ItemU,B,11,Product quality problem
+82,F00082,ItemU,C,22,Product quality problem
+84,F00084,ItemV,A,21,Product quality problem
+85,F00085,ItemV,B,20,Product quality problem
+88,F00088,ItemW,A,20,Product quality problem
+89,F00089,ItemW,B,10,Packing damage
+90,F00090,ItemW,C,5,Packing damage
