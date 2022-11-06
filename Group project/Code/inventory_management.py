@@ -65,19 +65,30 @@ class InventoryManagement():
 
 
     def inbound_inventory(self, info):
-        for i in info.InboundInfo:
-            for j in info.InventoryInfo:
+        print('*'*20+'Inventory management module'+'*'*20+'\n')
+        print('='*60)
+        print('Warehouse staff operation:\n')
+        print('Warehouse fills according to purchase list')
+        for i in self.InboundInfo:
+            for j in self.InventoryInfo:
                 if i['ItemNumber'] == j['ItemNumber']:
                     j['CurrentInventory'] = str(int(j['CurrentInventory']) + 1)
 
-
-
+                    
+                    
     def outbound_inventory(self, info):
-        for i in info.OutboundInfo:
-            for j in info.InventoryInfo:
+        print('='*60)
+        print('Warehouse staff operation:\n')
+        print('Goods leave from warehouse according to orders')
+        print('='*60+'\n')
+        print('*'*67)
+        for i in self.OutboundInfo:
+            for j in self.InventoryInfo:
                 if i['ItemNumber'] == j['ItemNumber']:
                     j['CurrentInventory'] = str(int(j['CurrentInventory']) - 1)
 
+                    
+                    
     def purchase_inbound(self, info):
         num = 0
         porter = {}
