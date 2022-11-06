@@ -44,16 +44,11 @@ class InventoryManagement():
 
 
     def order_outbound(self, info):
-        g = os.walk(r'..\Forms\Template\Orders')
-        concat_orders = []
-        for path, dir_list, file_list in g:
-            for file_name in file_list:
-                concat_orders += self.ReadCsv(os.path.join(path, file_name))
 
         # 将order导入inbound并重新编辑物品序号
         num = 0
         porter = {}
-        for dict in concat_orders:
+        for dict in info.InventoryInfo:
             num += 1
             porter['ID'] = str(num)
             porter['ItemNumber'] = dict['ItemNumber']
